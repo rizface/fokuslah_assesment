@@ -1,0 +1,2 @@
+- I don't know whether in 1 attempt you can answer questions from more than 1 subtopic, so I assume that 1 attempt only answers questions from 1 subtopic.
+- I don't know whether after completing the session it should display all user weaknesses from all topics or only the topics discussed during the assessment, so I assume it only displays weaknesses from the topics discussed in the assessment.

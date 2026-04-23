@@ -1,0 +1,11 @@
+- The payload accepts subtopics as free text, which risks being filled with subtopics that are not relevant to the question being answered, which can lead to unreliable data.
+- The payload does not accept time_start and time_end per answer and instead uses `now()` as the time_start and time_end values ​​for the database, which do not reflect the actual time the student worked on and answered the question.
+- The payload accepts is_correct and marks, which can be used to manipulate the values, impacting the accuracy of user weaknesses and user readiness analysis.
+- Unhandled JSON decoder errors can cause payload variables to contain empty/zero values ​​from defined structs. For example, the subtopic string field will contain an empty string ("") and can be inserted into the database as a valid value.
+- Payload accepts userId which means it can input answers on behalf of another user, the data becomes unreliable
+- Question IDs are not validated to be present in the database, potentially storing answers that have no associated question, resulting in unusable data and wasting database resources.
+- Insert data into the attempts table using loop which has the potential for invalid data if it fails midway because using a loop means all data is inserted using a different transaction, besides that each loop has the potential to open a new connection to the database which if in large numbers can overload the database.
+- Transactions are not used for interconnected operations that must be atomic, potentially leading to invalid data because they can be input half-way.
+- The weakness query counts all attempts the user has ever made, even though the data in the user_weaknesses table only stores calculations from the last 20 attempts for each topic.
+- The weakness query calculates the error rate for all subtopics in a single attempt, even though there may not be any questions related to that topic in the session.
+- There is no explanation why only weaknesses with an error rate >= 40% are returned to the user.
