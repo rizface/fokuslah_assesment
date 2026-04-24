@@ -60,6 +60,9 @@ I cache by `question_id` only, not by `(question_id, student_answer)`.
 
 The explanation covers *how to reach the correct answer*, not a teardown of a specific wrong answer. For a 16-year-old who just got a question wrong, understanding the correct method is more useful than understanding why their specific guess was wrong — and it lets us cache once per question across the entire ~800-question bank regardless of which of many possible wrong answers a student chose. This turns the cache from "useful sometimes" to "near-100% hit rate after warmup".
 
+We can also consider storing explanations generated using PostgreSQL, as the explanations for each question will always be the same. Using PostgreSQL eliminates cache expiration and eliminates the need to call LLM for expired explanations in Redis. This way, when all questions have explanations, we can reduce the cost of generating explanations by almost 100%. Of course, if more questions are added, LLM will be called again to get the explanations for those questions.
+We can also store explanations in Redis without requiring expiration, but because Redis stores data in memory, which is limited and expensive, PostgreSQL can be an alternative.
+
 ## What Happens When the LLM Goes Down at 9pm Sunday
 
 **Students who ask about already-seen questions (cache hit):**
